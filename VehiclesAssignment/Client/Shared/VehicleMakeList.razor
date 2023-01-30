@@ -1,0 +1,20 @@
+﻿@inject IVehicleMakeService VehicleMakeService
+
+@if (VehicleMakeService.VehicleMakes == null || VehicleMakeService.VehicleMakes.Count == 0)
+{
+    <span>Loading VehicleMakes...</span>
+}
+else
+{
+    
+}
+
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VehicleMakeService.GetVehicleMakes();
+    }
+}
