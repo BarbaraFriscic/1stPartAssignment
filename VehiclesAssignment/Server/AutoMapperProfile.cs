@@ -6,8 +6,8 @@ namespace VehiclesAssignment.Server
     {
         public AutoMapperProfile()
         {
-            CreateMap<VehicleMake, VehicleMakeDto>();
-            CreateMap<VehicleMakeDto, VehicleMake>();
+            //CreateMap<VehicleMake, VehicleMakeDto>();
+           // CreateMap<VehicleMakeDto, VehicleMake>();
         }
     }
 }

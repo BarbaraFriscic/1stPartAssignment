@@ -1,0 +1,73 @@
+﻿@page "/vehiclemake"
+@page "/vehiclemake/{id:int}"
+@using VehiclesAssignment.Shared
+@inject IVehicleMakeService VehicleMakeService
+
+@if (Id == null)
+{
+    <PageTitle>Create new Vehicle Make</PageTitle>
+    <h3>Create new Vehicle Make</h3>
+}
+else
+{
+    <PageTitle>Edit @vehicleMake.Name</PageTitle>
+    <h3>Edit @vehicleMake.Name</h3>
+}
+
+<EditForm Model="vehicleMake" OnSubmit="HandleSubmit">
+    <div>
+        <lable for="name">Name</lable>
+        <InputText id="name" @bind-Value="vehicleMake.Name" class="form-control"></InputText>
+    </div>
+    <div>
+        <lable for="abreviation">Abreviation</lable>
+        <InputText id="abreviation" @bind-Value="vehicleMake.Abreviation" class="form-control"></InputText>
+    </div><br />
+    <button type="submit" class="btn btn-primary">@btnText</button>
+
+    @if (Id != null)
+    {
+        <button type="button" class="btn btn-danger" @onclick="DeleteVehicleMake">Delete Vehicle Make</button>
+    }
+    
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    string btnText = string.Empty;
+
+    VehicleMake vehicleMake = new VehicleMake();
+
+    protected override async Task OnInitializedAsync()
+    {
+        btnText = Id == null ? "Save new Vehicle Make" : "Update Vehicle Make";
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(Id != null)
+        {
+            vehicleMake = await VehicleMakeService.GetVehicleMake((int)Id);
+        }
+    }
+
+    async Task HandleSubmit()
+    {
+        if(Id == null)
+        {
+            await VehicleMakeService.CreateVehicleMake(vehicleMake);
+        }
+        else
+        {
+            await VehicleMakeService.UpdateVehicleMake(vehicleMake);
+        }
+    }
+
+    async Task DeleteVehicleMake()
+    {
+        await VehicleMakeService.DeleteVehicleMake(vehicleMake.Id);
+    }
+}

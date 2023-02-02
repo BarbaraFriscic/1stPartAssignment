@@ -13,34 +13,18 @@ namespace VehiclesAssignment.Server.Services.VehicleService
             _context = context;
         }
 
-        public async Task<ServiceResponse<List<VehicleMake>>> GetVehicleMakeAsync(int vehicleMakeId)
+        public async Task<VehicleMake> GetVehicleMakeAsync(int vehicleMakeId)
         {
-            var response = new ServiceResponse<List<VehicleMake>>
-            {
-                Data = await _context.VehicleMakes
-                .Where(c => c.Id == vehicleMakeId)
-                .Include(c => c.Models)
-                .ToListAsync()
-            };
-            if (response.Data is null)
-            {
-                response.Success = false;
-                response.Message = "This Vehicle Make does not exist.";
-            }
+            var response = await _context.VehicleMakes.FirstOrDefaultAsync(vm => vm.Id == vehicleMakeId);
             return response;
         }
 
-        public async Task<ServiceResponse<List<VehicleMake>>> GetVehicleMakesAsync()
+        public async Task<List<VehicleMake>> GetVehicleMakesAsync()
         {
-            var response = new ServiceResponse<List<VehicleMake>>
-            {
-                Data = await _context.VehicleMakes
-                .Include(c => c.Models)
-                .ToListAsync()
-            };
+            var response = await _context.VehicleMakes.ToListAsync();
             return response;
         }
-        public async Task<ServiceResponse<List<VehicleMake>>> Create(VehicleMake newVehicleMake)
+        public async Task<List<VehicleMake>> Create(VehicleMake newVehicleMake)
         {
             var newVhclMake = new VehicleMake
             {
@@ -50,70 +34,31 @@ namespace VehiclesAssignment.Server.Services.VehicleService
             };
             _context.VehicleMakes.Add(newVhclMake);
             await _context.SaveChangesAsync();
-            var response = new ServiceResponse<List<VehicleMake>>
-            {
-                Data = await _context.VehicleMakes
-                .ToListAsync()
-            };
-            if (response.Data is null)
-            {
-                response.Success = false;
-                response.Message = "Unable to create new VehicleMake.";
-            }
+            var response = await _context.VehicleMakes.ToListAsync();
             return response;
         }
 
-        public async Task<ServiceResponse<VehicleMake>> UpdateVehicleMake(int id, VehicleMake updateVehicleMake)
+        public async Task<List<VehicleMake>> UpdateVehicleMake(int id, VehicleMake updateVehicleMake)
         {
-            var vehicleMakeToUpdate = await _context.VehicleMakes.FirstOrDefaultAsync(c => c.Id == id);
-            if (vehicleMakeToUpdate is null)
-                vehicleMakeToUpdate = null;
-            else
-            {
+            var vehicleMakeToUpdate = await _context.VehicleMakes.FirstOrDefaultAsync(vm => vm.Id == id);
                 vehicleMakeToUpdate.Name = updateVehicleMake.Name;
                 vehicleMakeToUpdate.Abreviation = updateVehicleMake.Abreviation;
-            }
-            
+      
             await _context.SaveChangesAsync();
 
-            var response = new ServiceResponse<VehicleMake>
-            {
-                Data = vehicleMakeToUpdate
-                
-            };
-            if (response.Data is null)
-            {
-                response.Success = false;
-                response.Message = "Unable to update a VehicleMake.";
-            }
+            var response = await _context.VehicleMakes.ToListAsync();
             return response;
-
-
         }
 
-        public async Task<ServiceResponse<List<VehicleMake>>> DeleteVehicleMake(int id)
+        public async Task<List<VehicleMake>> DeleteVehicleMake(int id)
         {
             
-            var vehicleMakeToDelete = await _context.VehicleMakes.FirstOrDefaultAsync(c => c.Id == id);
-            if (vehicleMakeToDelete is null)
-                vehicleMakeToDelete = null;
-            else
-           _context.VehicleMakes.Remove(vehicleMakeToDelete);
-
+            var vehicleMakeToDelete = await _context.VehicleMakes.FirstOrDefaultAsync(vm => vm.Id == id);
+           
+            _context.VehicleMakes.Remove(vehicleMakeToDelete);
             await _context.SaveChangesAsync();
 
-            var response = new ServiceResponse<List<VehicleMake>>
-                {
-                    Data = await _context.VehicleMakes
-                .ToListAsync() 
-                };
-            if (vehicleMakeToDelete == null)
-            {
-                response.Data = await _context.VehicleMakes
-                .ToListAsync();
-                response.Success = false;
-                response.Message = "Unable to delete this VehicleMake.";           
-            }      
+            var response = await _context.VehicleMakes.ToListAsync();
             return response;
         }
     }

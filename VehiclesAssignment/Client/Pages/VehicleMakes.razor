@@ -1,0 +1,52 @@
+﻿@page "/vehiclemakes"
+@inject IVehicleMakeService VehicleMakeService
+@inject NavigationManager NavigationManager
+<PageTitle>Vehicle Makes</PageTitle>
+
+<h3>Vehicle Makes</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Abreviation</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var vehicleMake in VehicleMakeService.VehicleMakes)
+        {
+            <tr>
+                <td>@vehicleMake.Id</td>
+                <td>@vehicleMake.Name</td>
+                <td>@vehicleMake.Abreviation</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowVehicleMake(vehicleMake.Id))"><i class="oi oi-pencil"></i></button>
+                    <button class="btn btn-primary" @onclick="(() => DeleteVehicle(vehicleMake.Id))"><i class="oi oi-delete"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewVehicleMake">Create New Vehicle Make</button>
+
+@code {
+
+    protected override async Task OnInitializedAsync() 
+    {
+        await VehicleMakeService.GetVehicleMakes();
+    }
+    void ShowVehicleMake(int id)
+    {
+        NavigationManager.NavigateTo($"vehiclemake/{id}");
+    }
+    void CreateNewVehicleMake()
+    {
+        NavigationManager.NavigateTo($"/vehiclemake");
+    }
+    async Task DeleteVehicle(int id)
+    {
+        await VehicleMakeService.DeleteVehicleMake(id);
+    }
+}

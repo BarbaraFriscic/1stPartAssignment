@@ -2,14 +2,14 @@
 {
     public interface IVehicleMakeService
     {
-        Task<ServiceResponse<List<VehicleMake>>> GetVehicleMakesAsync();
+        Task<List<VehicleMake>> GetVehicleMakesAsync();
 
-        Task<ServiceResponse<List<VehicleMake>>> GetVehicleMakeAsync(int vehicleMakeId);
+        Task<VehicleMake> GetVehicleMakeAsync(int vehicleMakeId);
 
-        Task<ServiceResponse<List<VehicleMake>>> Create(VehicleMake newVehicleMake);
+        Task<List<VehicleMake>> Create(VehicleMake newVehicleMake);
 
-        Task<ServiceResponse<VehicleMake>> UpdateVehicleMake(int id, VehicleMake updateVehicleMake);
+        Task<List<VehicleMake>> UpdateVehicleMake(int id, VehicleMake updateVehicleMake);
 
-        Task<ServiceResponse<List<VehicleMake>>> DeleteVehicleMake(int id);
+        Task<List<VehicleMake>> DeleteVehicleMake(int id);
     }
 }
